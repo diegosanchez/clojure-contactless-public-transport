@@ -1,4 +1,4 @@
-## Probe of concepts of "“The basic steps of a function design recipe” from HdP 
+## Probe of concepts of "The basic steps of a function design recipe" from HdP 
 
 The book: “How to Design Programs: An Introduction to Programming and Computing (The MIT Press).” iBooks.
 
