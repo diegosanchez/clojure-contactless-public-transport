@@ -38,8 +38,12 @@
   (s/keys
    :req [::transactions]))
 
-(s/def ::result
+(s/def ::status
   boolean?)
+
+(s/def ::result
+  (s/keys
+   :req [::card ::status]))
 
 ;; Step 2: Write down function's signature
 
@@ -54,42 +58,71 @@
 
 ;; Step 3: Ilustrate function with some examples
 
-;; (defn pay-raid
-;;   "Returns true if the card's balance is equal or bigger than the raid-cost.
-;;   Example 1 (only first use-case is included)
-;;   - card.transactions: [100]
-;;   - raid-cost: 10
-;;   - result: true
-;;   "
-;;   [card raid-cost]
-;;   false)
-
+  ;; (defn pay-raid
+  ;;   "Returns true if the card's balance is equal or bigger than the raid-cost."
+  ;;   Example 1 (only first use-case is included)
+  ;;   - card.transactions: [100]
+  ;;   - raid-cost: 10
+  ;;   - result: {
+  ;;       card: { :transactions [10]},
+  ;        status: true
+  ;;     }
+  ;;   [card raid-cost]
+  ;;   false)
+  
 ;; Step 4: Inventory
 
-;; (defn pay-raid
-;;   "Returns true if the card's balance is equal or bigger than the raid-cost.
-;;   Example 1 (only first use-case is included)
-;;   - card.transactions: [100]
-;;   - raid-cost: 10
-;;   - result: true
-;;   "
-;;   [card raid-cost]
-;;   (... card ... raid-cost...))
+  ;; (defn pay-raid
+  ;;   "Returns true if the card's balance is equal or bigger than the raid-cost."
+  ;;   - card.transactions: [100]
+  ;;   - raid-cost: 10
+  ;;   - result: {
+  ;;       card: { :transactions [10]},
+  ;        status: true
+  ;;     }
+  ;;   [card raid-cost]
+  ;;   (... card ... raid-cost...))
 
 ;; Step 5: Code the solution 
+
+(defn create-trx
+  [value]
+  value)
+
+(defn create-card
+  [initial-balance]
+  {:transactions [(create-trx initial-balance)]})
 
 (defn card-balance
   [card]
   (reduce + (:transactions card)))
 
+(defn card-consume-credit
+  [card amount]
+  {:transactions
+   (concat [(* -1 amount)] (:transactions card))})
+  
 (defn pay-raid
   "Returns true if the card's balance is equal or bigger than the raid-cost.
   Example 1 (only first use-case is included)
   - card.transactions: [100]
   - raid-cost: 10
-  - result: true
+  - result: {
+     card: { :transactions [10]},
+     status: true
+  }
+  Example 2 (only first use-case is included)
+  - card.transactions: [100]
+  - raid-cost: 110
+  - result: {
+     card: { :transactions []},
+     status: false
+  }
   "
   [card raid-cost]
-  (< raid-cost (card-balance card)))
+  {:card (card-consume-credit card raid-cost),
+   :status (< raid-cost (card-balance card))})
 
 ;; Step 6: Write tests
+
+;; See use_case_test.clj file

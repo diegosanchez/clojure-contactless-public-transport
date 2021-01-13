@@ -15,5 +15,5 @@ Every transaction has to be record on the contactless card.
 ### Use cases
 
 - [ ]  The balance is 100 and the user has to pay 10. The payment is accomplished, the card has a new record and the balance is 90.
-- [ ]  The balance is 200 and the user has to pay 110. The payment is accomplished, the card has a new record and the balance is -10.
-- [ ]  The balance is 10 and the user has to pay 20. The payment is not accomplished, the balance remains unchanged.
+- [ ]  The balance is 100 and the user has to pay 110. The payment is not accomplished, the balance remains unchanged.
+- [ ]  The balance is 100 and the user has to pay 110. The payment is accomplished, the card has a new record and the balance is -10.
