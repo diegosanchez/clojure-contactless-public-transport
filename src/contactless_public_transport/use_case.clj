@@ -2,6 +2,15 @@
   (:require [clojure.spec.alpha :as s])
   (:gen-class))
 
+(defn create-trx
+  [value]
+  value)
+
+(defn create-card
+  [initial-balance]
+  {:transactions [(create-trx initial-balance)]})
+
+
 ;; pay-ride
 ;; ========
 
@@ -79,7 +88,14 @@
   - card.transactions: [100]
   - raid-cost: 10
   - result: true
+  Example 2 (only first use-case is included)
+  - card.transactions: [100]
+  - raid-cost: 110
+  - result: false
   "
   [card raid-cost]
   (< raid-cost (card-balance card)))
 
+;; Step 6: Write tests
+
+;; See use_case_test.clj file
