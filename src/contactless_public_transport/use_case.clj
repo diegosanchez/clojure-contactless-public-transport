@@ -25,6 +25,9 @@
 
 ;;  Step 1: Define the data required by the function
 
+(s/def ::overdraft
+  pos-int?)
+
 (s/def ::raid-cost
   pos-int?)
 
@@ -36,7 +39,7 @@
 
 (s/def ::card
   (s/keys
-   :req [::transactions]))
+   :req [::overdraft ::transactions]))
 
 (s/def ::status
   boolean?)
@@ -83,15 +86,16 @@
   ;;   [card raid-cost]
   ;;   (... card ... raid-cost...))
 
-;; Step 5: Code the solution 
+;; Step 5.1: Code the solution
 
 (defn create-trx
   [value]
   value)
 
 (defn create-card
-  [initial-balance]
-  {:transactions [(create-trx initial-balance)]})
+  [initial-balance overdraft]
+  {:overdraft overdraft
+   :transactions [(create-trx initial-balance)]})
 
 (defn card-balance
   [card]
@@ -99,7 +103,8 @@
 
 (defn card-consume-credit
   [card amount]
-  {:transactions
+  {:overdraft (:overdraft card)
+   :transactions
    (concat [(* -1 amount)] (:transactions card))})
   
 (defn pay-raid
@@ -118,11 +123,21 @@
      card: { :transactions []},
      status: false
   }
+  Example 2 (only first use-case is included)
+  - card.transactions: [100]
+  - raid-cost: 110
+  - result: {
+     card: { :overdraft 10 :transactions []},
+     status: true
+  }
   "
   [card raid-cost]
   {:card (card-consume-credit card raid-cost),
-   :status (< raid-cost (card-balance card))})
+   :status (<
+            raid-cost
+            (+ (card-balance card)
+               (:overdraft card)))})
 
-;; Step 6: Write tests
+;; Step 6.1: Write tests
 
 ;; See use_case_test.clj file
