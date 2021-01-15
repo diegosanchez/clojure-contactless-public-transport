@@ -2,15 +2,6 @@
   (:require [clojure.spec.alpha :as s])
   (:gen-class))
 
-(defn create-trx
-  [value]
-  value)
-
-(defn create-card
-  [initial-balance]
-  {:transactions [(create-trx initial-balance)]})
-
-
 ;; pay-ride
 ;; ========
 
@@ -28,7 +19,7 @@
 (s/def ::overdraft
   pos-int?)
 
-(s/def ::raid-cost
+(s/def ::ride-cost
   pos-int?)
 
 (s/def ::trx
@@ -50,41 +41,42 @@
 
 ;; Step 2: Write down function's signature
 
-(s/fdef pay-raid
-  :args (s/cat ::card ::raid-cost)
+(s/fdef pay-ride
+  :args (s/cat :card ::card
+               :ride-cost ::ride-cost)
   :ret ::result)
 
 ;; (defn pay-raid
-;;   "Returns true if the card's balance is equal or bigger than the raid-cost"
-;;   [card raid-cost]
+;;   "Returns true if the card's balance is equal or bigger than the ride-cost"
+;;   [card ride-cost]
 ;;   false)
 
 ;; Step 3: Ilustrate function with some examples
 
   ;; (defn pay-raid
-  ;;   "Returns true if the card's balance is equal or bigger than the raid-cost."
+  ;;   "Returns true if the card's balance is equal or bigger than the ride-cost."
   ;;   Example 1 (only first use-case is included)
   ;;   - card.transactions: [100]
-  ;;   - raid-cost: 10
+  ;;   - ride-cost: 10
   ;;   - result: {
   ;;       card: { :transactions [10]},
   ;        status: true
   ;;     }
-  ;;   [card raid-cost]
+  ;;   [card ride-cost]
   ;;   false)
   
 ;; Step 4: Inventory
 
   ;; (defn pay-raid
-  ;;   "Returns true if the card's balance is equal or bigger than the raid-cost."
+  ;;   "Returns true if the card's balance is equal or bigger than the ride-cost."
   ;;   - card.transactions: [100]
-  ;;   - raid-cost: 10
+  ;;   - ride-cost: 10
   ;;   - result: {
   ;;       card: { :transactions [10]},
   ;        status: true
   ;;     }
-  ;;   [card raid-cost]
-  ;;   (... card ... raid-cost...))
+  ;;   [card ride-cost]
+  ;;   (... card ... ride-cost...))
 
 ;; Step 5.1: Code the solution
 
@@ -107,37 +99,44 @@
    :transactions
    (concat [(* -1 amount)] (:transactions card))})
   
-(defn pay-raid
-  "Returns true if the card's balance is equal or bigger than the raid-cost.
+(defn pay-ride
+  "Returns true if the card's balance is equal or bigger than the ride-cost.
   Example 1 (only first use-case is included)
   - card.transactions: [100]
-  - raid-cost: 10
+  - ride-cost: 10
   - result: {
      card: { :transactions [10]},
      status: true
   }
   Example 2 (only first use-case is included)
   - card.transactions: [100]
-  - raid-cost: 110
+  - ride-cost: 110
   - result: {
      card: { :transactions []},
      status: false
   }
   Example 2 (only first use-case is included)
   - card.transactions: [100]
-  - raid-cost: 110
+  - ride-cost: 110
   - result: {
      card: { :overdraft 10 :transactions []},
      status: true
   }
   "
-  [card raid-cost]
-  {:card (card-consume-credit card raid-cost),
+  [card ride-cost]
+  {:card (card-consume-credit card ride-cost),
    :status (<
-            raid-cost
+            ride-cost
             (+ (card-balance card)
                (:overdraft card)))})
 
 ;; Step 6.1: Write tests
 
 ;; See use_case_test.clj file
+(comment
+  (require '[clojure.spec.test.alpha :as stest])
+  (stest/abbrev-result (first (stest/check `pay-ride))))
+  
+;; => nil
+(comment
+  (pay-ride (create-card 100 1) 7))
