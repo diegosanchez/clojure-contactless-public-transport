@@ -23,21 +23,21 @@
   pos-int?)
 
 (s/def ::trx
-  pos-int?)
+  int?)
 
 (s/def ::transactions
   (s/coll-of ::trx))
 
 (s/def ::card
   (s/keys
-   :req [::overdraft ::transactions]))
+   :req-un [::overdraft ::transactions]))
 
 (s/def ::status
   boolean?)
 
 (s/def ::result
   (s/keys
-   :req [::card ::status]))
+   :req-un [::card ::status]))
 
 ;; Step 2: Write down function's signature
 
@@ -124,19 +124,36 @@
   }
   "
   [card ride-cost]
+  (println card ride-cost)
   {:card (card-consume-credit card ride-cost),
-   :status (<
-            ride-cost
-            (+ (card-balance card)
-               (:overdraft card)))})
+   :status true})
+   ;; :status (<
+   ;;          ride-cost
+   ;;          (+ (card-balance card)
+   ;;             (:overdraft card)))})
 
 ;; Step 6.1: Write tests
 
+(defn abc
+  [card ride-cost]
+  {:card (card-consume-credit card ride-cost), :status true})
+
+(s/fdef abc
+  :args (s/cat :card ::card
+               :ride-cost ::ride-cost)
+  :ret ::result)
+
+(comment
+  (require '[clojure.spec.test.alpha :as stest])
+
+  (abc (create-card 100 10) 10)
+
+  (stest/check `pay-ride)
 ;; See use_case_test.clj file
 (comment
   (require '[clojure.spec.test.alpha :as stest])
-  (stest/abbrev-result (first (stest/check `pay-ride))))
+
+  (stest/summarize-results (stest/check `pay-ride)))
   
-;; => nil
 (comment
-  (pay-ride (create-card 100 1) 7))
+  (pay-ride (create-card 100 10) 10))
