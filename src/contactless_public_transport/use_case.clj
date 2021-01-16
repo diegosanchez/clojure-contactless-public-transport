@@ -23,7 +23,7 @@
   pos-int?)
 
 (s/def ::trx
-  int?)
+  (s/int-in (- 500) 5000))
 
 (s/def ::transactions
   (s/coll-of ::trx))
@@ -126,11 +126,10 @@
   [card ride-cost]
   (println card ride-cost)
   {:card (card-consume-credit card ride-cost),
-   :status true})
-   ;; :status (<
-   ;;          ride-cost
-   ;;          (+ (card-balance card)
-   ;;             (:overdraft card)))})
+   :status (<
+            ride-cost
+            (+ (card-balance card)
+               (:overdraft card)))})
 
 ;; Step 6.1: Write tests
 
@@ -148,12 +147,17 @@
 
   (abc (create-card 100 10) 10)
 
-  (stest/check `pay-ride)
+  (stest/summarize-results (stest/check `abc)))
 ;; See use_case_test.clj file
 (comment
   (require '[clojure.spec.test.alpha :as stest])
 
-  (stest/summarize-results (stest/check `pay-ride)))
-  
+  (first (stest/check `pay-ride)))
+
+(comment
+  (require '[clojure.spec.gen.alpha :as gen])
+  (gen/sample (s/gen ::trx))
+
+)
 (comment
   (pay-ride (create-card 100 10) 10))
