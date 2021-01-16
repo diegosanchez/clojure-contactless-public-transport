@@ -1,13 +1,14 @@
 (ns contactless-public-transport.use-case-test
   (:require [clojure.test :refer :all]
             [contactless-public-transport.use_case :refer :all]))
+(def a-card-with-balance-one-hundred
+  (create-card 100 0))
 
 (deftest successful-ride
   (testing "Given a card with balance of 100 and user taking a train costing 10 can get it"
     (is (:status
-         (pay-ride
-          (create-card 100 0)
-          10)))
+         (pay-ride a-card-with-balance-one-hundred
+                   10)))
     (is (:status
          (pay-ride
           (:card (pay-ride (create-card 100 0) 10))
@@ -15,8 +16,10 @@
 
 (deftest failing-ride
   (testing "Given a card with balance of 100 and user taking a train costing 110 cannot get it"
-    (is (not (:status (pay-ride (create-card 100 0) 110))))
+    (is (not (:status
+              (pay-ride a-card-with-balance-one-hundred
+                        110))))
     (is (not (:status
               (pay-ride
-               (:card (pay-ride (create-card 100 0) 10))
+               (:card (pay-ride a-card-with-balance-one-hundred 10))
                95))))))

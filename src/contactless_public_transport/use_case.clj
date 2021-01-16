@@ -124,7 +124,6 @@
   }
   "
   [card ride-cost]
-  (println card ride-cost)
   {:card (card-consume-credit card ride-cost),
    :status (<
             ride-cost
