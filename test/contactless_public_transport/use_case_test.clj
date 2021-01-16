@@ -8,6 +8,10 @@
 (def a-card-with-balance-one-hundred-and-with-overdraft-of-ten
   (create-card 100 10))
 
+(defn is-not
+  [logical-value]
+  (is (not logical-value)))
+
 (deftest successful-ride
   (testing "Given a card with balance of 100 and user taking a train costing 10 can get it"
     (is (:status
@@ -23,13 +27,13 @@
 
 (deftest failing-ride
   (testing "Given a card with balance of 100 and user taking a train costing 110 cannot get it"
-    (is (not (:status
+    (is-not (:status
               (pay-ride a-card-with-balance-one-hundred
-                        110))))
-    (is (not (:status
+                        110)))
+    (is-not (:status
          (pay-ride a-card-with-balance-one-hundred-and-with-overdraft-of-ten
-                   120))))
-    (is (not (:status
+                   120)))
+    (is-not (:status
               (pay-ride
                (:card (pay-ride a-card-with-balance-one-hundred 10))
-               95))))))
+               95)))))
