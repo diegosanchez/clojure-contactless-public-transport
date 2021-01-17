@@ -108,6 +108,12 @@
    :transactions
    (concat [(- amount)] (:transactions card))})
   
+(defn card-ride-affordable?
+  [card ride-cost]
+  (< ride-cost
+              (+ (card-balance card)
+                 (:overdraft card))))
+
 (defn pay-ride
   "Returns true if the card's balance is equal or bigger than the ride-cost.
   Example 1 (only first use-case is included)
@@ -134,10 +140,7 @@
   "
   [card ride-cost]
   {:card (card-consume-credit card ride-cost),
-   :status (<
-            ride-cost
-            (+ (card-balance card)
-               (:overdraft card)))})
+   :status (card-ride-affordable? card ride-cost)})
 
 ;; Step 6.1: Write tests
 
