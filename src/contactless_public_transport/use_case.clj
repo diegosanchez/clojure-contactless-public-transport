@@ -16,14 +16,23 @@
 
 ;;  Step 1: Define the data required by the function
 
+;; Issue 0: Detected
+;;  Integer overflow arithmetic
+
+;; Issue 1: Overdraft + trx
+;;  The ride-cost should range from 0 - trx-min-value
+
 (s/def ::overdraft
   pos-int?)
 
+(def trx-min-value 500)
+(def trx-max-value 5000)
+
 (s/def ::ride-cost
-  pos-int?)
+  (s/int-in 0 trx-min-value))
 
 (s/def ::trx
-  (s/int-in (- 500) 5000))
+  (s/int-in (- trx-min-value) trx-max-value))
 
 (s/def ::transactions
   (s/coll-of ::trx))
@@ -97,7 +106,7 @@
   [card amount]
   {:overdraft (:overdraft card)
    :transactions
-   (concat [(* -1 amount)] (:transactions card))})
+   (concat [(- amount)] (:transactions card))})
   
 (defn pay-ride
   "Returns true if the card's balance is equal or bigger than the ride-cost.
@@ -132,22 +141,9 @@
 
 ;; Step 6.1: Write tests
 
-(defn abc
-  [card ride-cost]
-  {:card (card-consume-credit card ride-cost), :status true})
 
-(s/fdef abc
-  :args (s/cat :card ::card
-               :ride-cost ::ride-cost)
-  :ret ::result)
-
-(comment
-  (require '[clojure.spec.test.alpha :as stest])
-
-  (abc (create-card 100 10) 10)
-
-  (stest/summarize-results (stest/check `abc)))
 ;; See use_case_test.clj file
+
 (comment
   (require '[clojure.spec.test.alpha :as stest])
 
