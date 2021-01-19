@@ -29,9 +29,11 @@
 (def trx-max-value 5000)
 
 (s/def ::ride-cost
+  ;; pos-int? -501
   (s/int-in 0 trx-min-value))
 
 (s/def ::trx
+  ;; int?
   (s/int-in (- trx-min-value) trx-max-value))
 
 (s/def ::transactions
@@ -150,7 +152,8 @@
 (comment
   (require '[clojure.spec.test.alpha :as stest])
 
-  (first (stest/check `pay-ride)))
+  (first (stest/check `pay-ride))
+  )
 
 (comment
   (require '[clojure.spec.gen.alpha :as gen])
