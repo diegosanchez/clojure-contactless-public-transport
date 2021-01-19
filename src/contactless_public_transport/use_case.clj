@@ -64,30 +64,30 @@
 
 ;; Step 3: Ilustrate function with some examples
 
-  ;; (defn pay-raid
-  ;;   "Returns true if the card's balance is equal or bigger than the ride-cost."
-  ;;   Example 1 (only first use-case is included)
-  ;;   - card.transactions: [100]
-  ;;   - ride-cost: 10
-  ;;   - result: {
-  ;;       card: { :transactions [10]},
-  ;        status: true
-  ;;     }
-  ;;   [card ride-cost]
-  ;;   false)
+;; (defn pay-raid
+;;   "Returns true if the card's balance is equal or bigger than the ride-cost."
+;;   Example 1 (only first use-case is included)
+;;   - card.transactions: [100]
+;;   - ride-cost: 10
+;;   - result: {
+;;       card: { :transactions [10]},
+;;        status: true
+;;     }
+;;   [card ride-cost]
+;;   false)
   
 ;; Step 4: Inventory
 
-  ;; (defn pay-raid
-  ;;   "Returns true if the card's balance is equal or bigger than the ride-cost."
-  ;;   - card.transactions: [100]
-  ;;   - ride-cost: 10
-  ;;   - result: {
-  ;;       card: { :transactions [10]},
-  ;        status: true
-  ;;     }
-  ;;   [card ride-cost]
-  ;;   (... card ... ride-cost...))
+;; (defn pay-raid
+;;   "Returns true if the card's balance is equal or bigger than the ride-cost."
+;;   - card.transactions: [100]
+;;   - ride-cost: 10
+;;   - result: {
+;;       card: { :transactions [10]},
+;;        status: true
+;;     }
+;;   [card ride-cost]
+;;   (... card ... ride-cost...))
 
 ;; Step 5.1: Code the solution
 
@@ -152,13 +152,13 @@
 (comment
   (require '[clojure.spec.test.alpha :as stest])
 
-  (first (stest/check `pay-ride))
-  )
+  (first (stest/check `pay-ride)))
+  
 
 (comment
   (require '[clojure.spec.gen.alpha :as gen])
-  (gen/sample (s/gen ::trx))
+  (gen/sample (s/gen ::trx)))
 
-)
+  
 (comment
   (pay-ride (create-card 100 10) 10))

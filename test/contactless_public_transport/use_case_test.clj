@@ -31,7 +31,7 @@
               (pay-ride a-card-with-balance-one-hundred
                         110)))
     (is-not (:status
-         (pay-ride a-card-with-balance-one-hundred-and-with-overdraft-of-ten
+             (pay-ride a-card-with-balance-one-hundred-and-with-overdraft-of-ten
                    120)))
     (is-not (:status
               (pay-ride
